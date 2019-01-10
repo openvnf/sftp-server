@@ -20,6 +20,7 @@ sftpConfig:
   encrypted: false
   uid: ""
   gid: ""
+  authorizedKeys: {}
 
 
 resources:

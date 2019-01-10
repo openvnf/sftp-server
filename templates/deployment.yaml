@@ -30,6 +30,10 @@ spec:
           volumeMounts:
             - name: sftp-config
               mountPath: /etc/sftp/
+            {{- if .Values.sftpConfig.authorizedKeys }}
+            - name: authorized-keys
+              mountPath: /home/ {{- .Values.sftpConfig.username -}} /.ssh/keys/
+            {{- end }}
           livenessProbe:
             tcpSocket:
               port: 22
@@ -41,7 +45,12 @@ spec:
       volumes:
       - name: sftp-config
         configMap:
-          name: {{ include "sftp-server.fullname" . }}
+          name: {{ include "sftp-server.fullname" . }}-users
+      {{- if .Values.sftpConfig.authorizedKeys }}
+      - name: authorized-keys
+        configMap:
+          name: {{ template "sftp-server.fullname" . }}-authorized-keys
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

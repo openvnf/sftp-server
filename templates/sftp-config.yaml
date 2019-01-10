@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "sftp-server.fullname" . }}
+  name: {{ template "sftp-server.fullname" . }}-users
 data:
   users.conf: |
       {{- if eq .Values.sftpConfig.encrypted true }}
