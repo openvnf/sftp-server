@@ -18,7 +18,28 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "sftp-server.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- if .Values.vxlanController.enabled }}
+        {{ .Values.vxlanController.metadataKey }}: "true"
+        {{- end }}
+      annotations:
+        {{- if .Values.vxlanController.enabled }}
+        {{ .Values.vxlanController.annotationKey }}: | 
+          {{ .Values.vxlanController.network }}
+            {{ if .Values.vxlanController.ip -}} ip= {{- .Values.vxlanController.ip }} {{- end}}
+            {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
+        {{- end }}
     spec:
+      initContainers:
+      {{- if .Values.vxlanController.enabled }}
+      - name: vxlan-controller-agent-init
+        image: {{ .Values.vxlanController.image.repository }}:{{ .Values.vxlanController.image.tag }}
+        imagePullPolicy: {{ .Values.vxlanController.image.pullPolicy  | quote }}
+        resources:
+{{ toYaml .Values.vxlanController.resources | indent 10 }}
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -42,6 +63,17 @@ spec:
               port: 22
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.vxlanController.enabled }}
+        - name: vxlan-controller-agent
+          image: {{ .Values.vxlanController.image.repository }}:{{ .Values.vxlanController.image.tag }}
+          imagePullPolicy: {{ .Values.vxlanController.image.pullPolicy | quote }}
+          resources:
+            {{- toYaml .Values.vxlanController.resources | nindent 12 }}
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+        {{- end }}
       volumes:
       - name: sftp-config
         configMap:

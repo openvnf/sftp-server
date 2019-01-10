@@ -22,6 +22,24 @@ sftpConfig:
   gid: ""
   authorizedKeys: {}
 
+vxlanController:
+  enabled: false
+  annotationKey: vxlan.openvnf.org/networks
+  metadataKey: vxlan.openvnf.org
+  image:
+    repository: openvnf/kube-vxlan-controller-agent
+    tag: 2.1.0
+    pullPolicy: IfNotPresent
+  network: "vxeth0"
+  ip: {}
+  route: {}
+  resources:
+    limits:
+      cpu: 50m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
 
 resources:
   limits:
