@@ -55,6 +55,10 @@ spec:
             - name: authorized-keys
               mountPath: /home/ {{- .Values.sftpConfig.username -}} /.ssh/keys/
             {{- end }}
+            {{- if .Values.sftpConfig.hostKeysSecret }}
+            - name: ssh-host-keys
+              mountPath: /run/ssh-host-keys
+            {{- end }}
           livenessProbe:
             tcpSocket:
               port: 22
@@ -82,6 +86,11 @@ spec:
       - name: authorized-keys
         configMap:
           name: {{ template "sftp-server.fullname" . }}-authorized-keys
+      {{- end }}
+      {{- if .Values.sftpConfig.hostKeysSecret }}
+      - name: ssh-host-keys
+        secret:
+          secretName: {{ .Values.sftpConfig.hostKeysSecret }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

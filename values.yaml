@@ -21,6 +21,7 @@ sftpConfig:
   encrypted: false
   uid: ""
   gid: ""
+  hostKeysSecret: {}
   authorizedKeys: {}
 
 vxlanController:
