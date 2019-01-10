@@ -21,6 +21,11 @@ sftpConfig:
   encrypted: false
   uid: ""
   gid: ""
+  hostKeys: {}
+    #secret: name-of-existing-secret
+    #keys:
+    #- ssh_host_rsa_key
+    #- ssh_host_ed25519_key
   authorizedKeys: {}
 
 vxlanController:
