@@ -1,0 +1,37 @@
+# Default values for sftp-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: atmoz/sftp
+  tag: alpine-3.7
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 22
+
+sftpConfig:
+  username: sftp
+  password: ""
+  encrypted: false
+  uid: ""
+  gid: ""
+
+
+resources:
+  limits:
+   cpu: 100m
+   memory: 128Mi
+  requests:
+   cpu: 100m
+   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

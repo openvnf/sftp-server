@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sftp-server.fullname" . }}
+data:
+  users.conf: |
+      {{- if eq .Values.sftpConfig.encrypted true }}
+      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:e:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{- else }}
+      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{- end }}
