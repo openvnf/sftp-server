@@ -28,6 +28,16 @@ sftpConfig:
     #- ssh_host_ed25519_key
   authorizedKeys: {}
 
+persistentVolume:
+  enabled: true
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  existingClaim: ""
+  size: 20Gi
+  # storageClass: "-"
+  subPath: ""
+
 vxlanController:
   enabled: false
   annotationKey: vxlan.openvnf.org/networks

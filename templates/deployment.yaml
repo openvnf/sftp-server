@@ -51,6 +51,13 @@ spec:
           volumeMounts:
             - name: sftp-config
               mountPath: /etc/sftp/
+            {{- if .Values.persistentVolume.enabled }}
+            - name: data
+              mountPath: /home/ {{- .Values.sftpConfig.username -}} /
+              {{- if .Values.persistentVolume.subPath }}
+              subPath: "{{ .Values.persistentVolume.subPath }}"
+              {{- end }}
+            {{- end }}
             {{- if .Values.sftpConfig.authorizedKeys }}
             - name: authorized-keys
               mountPath: /home/ {{- .Values.sftpConfig.username -}} /.ssh/keys/
@@ -95,6 +102,11 @@ spec:
         secret:
           secretName: {{ .Values.sftpConfig.hostKeys.secret }}
           defaultMode: 384
+      {{- end }}
+      {{- if .Values.persistentVolume.enabled }}
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ template "sftp-server.fullname" . }}-data{{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
