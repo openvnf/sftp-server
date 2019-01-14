@@ -1,0 +1,19 @@
+sudo: enabled
+
+services:
+  - docker
+
+install:
+  - docker pull lachlanevenson/k8s-helm
+
+script:
+  - docker run -v `pwd`:/opt/sftp-server --entrypoint "/bin/sh" lachlanevenson/k8s-helm -c  "cd /opt/sftp-server; helm init -c; helm repo add repo $CHART_REPO; helm package -u ."
+
+deploy:
+  provider: script
+  script: bash -c 'curl --data-binary "@$(ls *.tgz)" $CHART_REPO/api/charts'
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+
