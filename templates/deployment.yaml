@@ -13,6 +13,8 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "sftp-server.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
