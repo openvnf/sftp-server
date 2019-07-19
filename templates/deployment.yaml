@@ -81,7 +81,7 @@ spec:
             tcpSocket:
               port: 22
           resources:
-            {{- toYaml .Values.resources.sftp | indent 12 }}
+            {{- toYaml .Values.resources.sftp | nindent 12 }}
         {{- if .Values.debug.enabled }}
         - name: debug
           image: {{ .Values.debug.image.repository }}:{{ .Values.debug.image.tag }}
