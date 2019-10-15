@@ -2,6 +2,13 @@
 
 A helm chart for a SFTP server.
 
+This chart is a fork of [openvnf/sftp-server](https://github.com/openvnf/sftp-server)
+The extra features added in this fork:
+- Included pull request fixing a missing indent in sftp-container resource definition (https://github.com/openvnf/sftp-server/pull/6)
+- Support for multiple users having different passwords and mounting different paths on a persistent volume. This allows to configure 2 users, one for external, more limited access, and one for internal, less limited access
+- Support for init script
+- Changing the default image to atmoz/sftp
+
 
 ## Introduction
 
@@ -52,21 +59,24 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `service.enabled`                  | If true, expose as Service                 | `true`                                      |
 | `service.type`                     | Type of exposed Service                    | `ClusterIP`                                 |
 | `service.port`                     | Port to expose Service                     | `22`                                        |
-| `sftpConfig.username`              | SFTP username                              | `sftp`                                      |
-| `sftpConfig.password`              | SFTP password for user                     | `""`                                        |
-| `sftpConfig.encrypted`             | If true, password is given as hash         | `false`                                     |
-| `sftpConfig.uid`                   | UID of SFTP user                           | `1000`                                      |
-| `sftpConfig.gid`                   | GID of SFTP user                           | `100`                                       |
+| `sftpConfig.users.username`        | SFTP username                              | `sftp`                                      |
+| `sftpConfig.users.password`        | SFTP password for user                     | `""`                                        |
+| `sftpConfig.users.encrypted`       | If true, password is given as hash         | `false`                                     |
+| `sftpConfig.users.uid`             | UID of SFTP user                           | `1000`                                      |
+| `sftpConfig.users.gid`             | GID of SFTP user                           | `100`                                       |
+| `sftpConfig.users.authorizedKeys`  | list of authorized SSH keys                | `{}`                                        |
+| `sftpConfig.users.mountPath`       | Path to mount an existing volume           | `"/home/sftp/ftp"`                          |
+| `sftpConfig.users.subPath`         | Use subPath of existing volume             | `""`                                        |
 | `sftpConfig.hostKeys.secret`       | name of secret for SSH host keys           | `""`                                        |
 | `sftpConfig.hostKeys.keys`         | list of items to be used from secret       | `{}`                                        |
-| `sftpConfig.authorizedKeys`        | list of authorized SSH keys                | `{}`                                        |
 | `persistentVolume.enabled`         | If true, use persistent volume             | `true`                                      |
 | `persistentVolume.annotations`     | annotations put on the volume              | `{}`                                        |
 | `persistentVolume.accessModes`     | access modes for volume                    | `[ReadWriteOnce]`                           |
 | `persistentVolume.existingClaim`   | If set, use existing PVC                   | `""`                                        |
 | `persistentVolume.size`            | Size of volume                             | `20Gi`                                      |
 | `persistentVolume.storageClass`    | StorageClass to be used in PVC             | not set                                     |
-| `persistentVolume.subPath`         | Use subPath of existing volume             | `""`                                        |
+| `init.enabled`                     | If true, use an init script                | `false`                                     |
+| `init.script`                      | The content of init script                 | `""`                                        |
 | `vxlanController.enabled`          | If enabled, start kube-vxlan-controller    | `false`                                     |
 | `vxlanController.annotationKey`    | Annotation name to set for vxlan           | `vxlan.openvnf.org/networks`                |
 | `vxlanController.metadataKey`      | Metadata key to set for vxlan              | `vxlan.openvnf.org`                         |

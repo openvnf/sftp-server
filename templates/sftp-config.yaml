@@ -4,8 +4,10 @@ metadata:
   name: {{ template "sftp-server.fullname" . }}-users
 data:
   users.conf: |
-      {{- if eq .Values.sftpConfig.encrypted true }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:e:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{- range $user := .Values.sftpConfig.users }}
+      {{- if eq $user.encrypted true }}
+      {{ $user.username }}:{{ $user.password }}:e:{{ $user.uid}}:{{ $user.gid }}
       {{- else }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{ $user.username }}:{{ $user.password }}:{{ $user.uid}}:{{ $user.gid }}
+      {{- end }}
       {{- end }}

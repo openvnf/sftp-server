@@ -1,0 +1,8 @@
+{{- if .Values.init.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sftp-server.fullname" . }}-init
+data:
+  init.sh: {{- toYaml .Values.init.script | indent 2 }}
+{{- end }}
