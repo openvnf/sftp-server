@@ -1,3 +1,5 @@
+{{- $fullname := include "sftp-server.fullname" . }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -57,15 +59,19 @@ spec:
             - name: sftp-config
               mountPath: /etc/sftp/
             {{- if .Values.persistentVolume.enabled }}
+            {{- range $user := .Values.sftpConfig.users }}
             - name: data
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /
-              {{- if .Values.persistentVolume.subPath }}
-              subPath: "{{ .Values.persistentVolume.subPath }}"
+              mountPath: {{ $user.mountPath }}
+              {{- if $user.subPath }}
+              subPath: "{{ $user.subPath }}"
               {{- end }}
             {{- end }}
-            {{- if .Values.sftpConfig.authorizedKeys }}
-            - name: authorized-keys
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /.ssh/keys/
+            {{- end }}
+            {{- range $user := .Values.sftpConfig.users }}
+            {{- if $user.authorizedKeys }}
+            - name: authorized-keys-{{ $user.username }}
+              mountPath: /home/{{ $user.username }}/.ssh/keys/
+            {{- end }}
             {{- end }}
             {{- if .Values.sftpConfig.hostKeys }}
             {{- range .Values.sftpConfig.hostKeys.keys }}
@@ -74,6 +80,11 @@ spec:
               subPath: {{ . }}
             {{- end }}
             {{- end }}
+            {{- if .Values.init.enabled }}
+            - name: init-script
+              mountPath: /etc/sftp.d/init.sh
+              subPath: init.sh
+            {{- end }}
           livenessProbe:
             tcpSocket:
               port: 22
@@ -81,7 +92,7 @@ spec:
             tcpSocket:
               port: 22
           resources:
-            {{- toYaml .Values.resources.sftp | indent 12 }}
+            {{- toYaml .Values.resources.sftp | nindent 12 }}
         {{- if .Values.debug.enabled }}
         - name: debug
           image: {{ .Values.debug.image.repository }}:{{ .Values.debug.image.tag }}
@@ -111,10 +122,12 @@ spec:
       - name: sftp-config
         configMap:
           name: {{ include "sftp-server.fullname" . }}-users
-      {{- if .Values.sftpConfig.authorizedKeys }}
-      - name: authorized-keys
+      {{- range $user := .Values.sftpConfig.users }}
+      {{- if $user.authorizedKeys }}
+      - name: authorized-keys-{{ $user.username }}
         configMap:
-          name: {{ template "sftp-server.fullname" . }}-authorized-keys
+          name: {{ $fullname }}-{{ $user.username }}-authorized-keys
+      {{- end }}
       {{- end }}
       {{- if .Values.sftpConfig.hostKeys }}
       - name: ssh-host-keys
@@ -123,6 +136,12 @@ spec:
           defaultMode: 384
       {{- end }}
       {{- if .Values.persistentVolume.enabled }}
+      {{- if .Values.init.enabled }}
+      - name: init-script
+        configMap:
+          name: {{ include "sftp-server.fullname" . }}-init
+          defaultMode: 0775
+      {{- end }}
       - name: data
         persistentVolumeClaim:
           claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ template "sftp-server.fullname" . }}-data{{- end }}

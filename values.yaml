@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: quay.io/openvnf/sftp
+  repository: atmoz/sftp
   tag: alpine-3.7
   pullPolicy: IfNotPresent
 
@@ -16,17 +16,36 @@ service:
   port: 22
 
 sftpConfig:
-  username: sftp
-  password: ""
-  encrypted: false
-  uid: ""
-  gid: ""
+  users:
+    - username: sftp
+      password: ""
+      encrypted: false
+      uid: ""
+      gid: ""
+      authorizedKeys: {}
+      mountPath: "/home/sftp/ftp"
+      #subPath: "inbox" # mounts to a subfolder "inbox" on a persistent volume. This user will only be able to access "inbox subfolder"
+    #- username: sftp-admin
+    #  password: ""
+    #  encrypted: false
+    #  uid: ""
+    #  gid: ""
+    #  authorizedKeys: {}
+    #  mountPath: /home/sftp-admin/ftp # this user will see all subfolders on a persistent volume
   hostKeys: {}
-    #secret: name-of-existing-secret
-    #keys:
-    #- ssh_host_rsa_key
-    #- ssh_host_ed25519_key
-  authorizedKeys: {}
+    # secret: name-of-existing-secret
+    # keys:
+    # - ssh_host_rsa_key
+    # - ssh_host_ed25519_key
+
+init:
+  enabled: false
+  #script: |
+  #  #!/bin/bash
+  #  if ! [ -d /home/sftp/ftp/inbox ]; then
+  #    mkdir /home/sftp/ftp/inbox
+  #  fi  
+  #  chmod -R a+rw /home/sftp/ftp
 
 debug:
   enabled: false
@@ -43,7 +62,6 @@ persistentVolume:
   existingClaim: ""
   size: 20Gi
   # storageClass: "-"
-  subPath: ""
 
 vxlanController:
   enabled: false

@@ -2,6 +2,11 @@
 
 ## pre 1.0
 
+### 0.4.0
+
+ * Added support for multiple users having different passwords and mounting different paths on a persistent volume
+ * Added support for init script
+
 ### 0.3.0
 
 * Added `NET_ADMIN` capabilities to the sftp-server container.
