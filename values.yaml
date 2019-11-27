@@ -21,6 +21,7 @@ sftpConfig:
   encrypted: false
   uid: ""
   gid: ""
+  dir: ""
   hostKeys: {}
     #secret: name-of-existing-secret
     #keys:
