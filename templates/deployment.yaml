@@ -80,8 +80,6 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 22
-          resources:
-            {{- toYaml .Values.resources.sftp | indent 12 }}
         {{- if .Values.debug.enabled }}
         - name: debug
           image: {{ .Values.debug.image.repository }}:{{ .Values.debug.image.tag }}
@@ -96,6 +94,7 @@ spec:
           - -c
           - "trap : TERM INT; (while true; do sleep 1000; done) & wait"
         {{- end }}
+          resources: {{- toYaml .Values.resources.sftp | nindent 12 }}
         {{- if .Values.vxlanController.enabled }}
         - name: vxlan-controller-agent
           image: {{ .Values.vxlanController.image.repository }}:{{ .Values.vxlanController.image.tag }}
