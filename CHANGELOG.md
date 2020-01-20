@@ -2,6 +2,11 @@
 
 ## pre 1.0
 
+### 0.3.1
+
+* Move debug container to first position to make it the default target for container attachments.
+* Fix inclusion of resource definitions.
+
 ### 0.3.0
 
 * Added `NET_ADMIN` capabilities to the sftp-server container.
