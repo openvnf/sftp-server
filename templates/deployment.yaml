@@ -81,13 +81,13 @@ spec:
             tcpSocket:
               port: 22
           resources:
-            {{- toYaml .Values.resources.sftp | indent 12 }}
+{{ toYaml .Values.resources.sftp | indent 12 }}
         {{- if .Values.debug.enabled }}
         - name: debug
           image: {{ .Values.debug.image.repository }}:{{ .Values.debug.image.tag }}
           imagePullPolicy: {{ .Values.debug.image.pullPolicy | quote }}
           resources:
-  {{ toYaml .Values.resources.debug | indent 10 }}
+{{ toYaml .Values.resources.debug | indent 10 }}
           securityContext:
             capabilities:
               add: ["NET_ADMIN"]
