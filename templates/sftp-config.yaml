@@ -5,5 +5,9 @@ metadata:
 data:
   users.conf: |
     {{- range .Values.sftpConfig.users }}
-      {{ .userName }}:{{ .passWord }}:{{ .uid }}:{{ .gid }}:{{ .homeDir }}
+    {{- if .encrypted }}
+    {{ .userName }}:{{ .passWord }}:e:{{ .uid }}:{{ .gid }}:{{ .homeDir }}
+    {{- else }}
+    {{ .userName }}:{{ .passWord }}:{{ .uid }}:{{ .gid }}:{{ .homeDir }}
+    {{- end }}
     {{- end }}
