@@ -58,16 +58,16 @@ spec:
               mountPath: /etc/sftp/
             {{- if .Values.persistentVolume.enabled }}
             - name: data
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /
+              mountPath: /home/
               {{- if .Values.persistentVolume.subPath }}
               subPath: "{{ .Values.persistentVolume.subPath }}"
               {{- end }}
             {{- end }}
             {{- range .Values.sftpConfig.users }}
-            {{- if gt (len .authorizedKeys) 0 -}}
+            {{- if gt (len .authorizedKeys) 0 }}
             - name: volume-authorized-keys-{{ .userName }}
               mountPath: /home/{{- .userName -}}/.ssh/
-            {{- end -}}
+            {{- end }}
             {{- end }}
             {{- if .Values.sftpConfig.hostKeys }}
             {{- range .Values.sftpConfig.hostKeys.keys }}
@@ -113,13 +113,13 @@ spec:
       - name: sftp-config
         configMap:
           name: {{ include "sftp-server.fullname" . }}-users
-      {{- $fullName := include "sftp-server.fullname" . -}}
+      {{- $fullName := include "sftp-server.fullname" . }}
       {{- range .Values.sftpConfig.users }}
-      {{- if gt (len .authorizedKeys) 0 -}}
+      {{- if gt (len .authorizedKeys) 0 }}
       - name: volume-authorized-keys-{{ .userName }}
         configMap:
           name: {{ $fullName }}-authorized-keys{{ .userName }}
-      {{- end -}}
+      {{- end }}
       {{- end }}
       {{- if .Values.sftpConfig.hostKeys }}
       - name: ssh-host-keys

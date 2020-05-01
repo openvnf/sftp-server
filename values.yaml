@@ -20,7 +20,7 @@ sftpConfig:
     - userName: sftp
       passWord: $1$BIwA$AdvAQ&EAqZ@2YY$1ynD
       authorizedKeys: 
-        - id_rsa.pub: ssh-rsa SampleBase64RSA123== test@sftp.com
+        id_rsa.pub: ssh-rsa SampleBase64RSA123== test@sftp.com
       encrypted: true
       uid: 1001
       gid: 100
