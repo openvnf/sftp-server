@@ -2,6 +2,11 @@
 
 ## pre 1.0
 
+### 0.4.0
+
+* Added authorized keys to users
+
+
 ### 0.3.0
 
 * Added `NET_ADMIN` capabilities to the sftp-server container.
