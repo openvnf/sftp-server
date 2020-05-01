@@ -1,11 +1,11 @@
-{{- if .Values.sftpConfig.authorizedKeys }}
+{{- $fullName := include "sftp-server.fullname" . -}}
+{{- range .Values.sftpConfig.users }}
+{{- if gt (len .authorizedKeys) 0 -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "sftp-server.fullname" . }}-authorized-keys
+  name: {{ $fullName }}-authorized-keys-{{ .userName }}
 data:
-  id_rsa.pub: |
-    {{- range .Values.sftpConfig.authorizedKeys }}
-    {{ . }}
-    {{- end }}
+    {{- toYaml .authorizedKeys | nindent 4 }}
+{{- end -}}
 {{- end }}

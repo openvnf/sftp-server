@@ -16,17 +16,21 @@ service:
   port: 22
 
 sftpConfig:
-  username: sftp
-  password: ""
-  encrypted: false
-  uid: ""
-  gid: ""
+  users:
+    - userName: sftp
+      passWord: $1$BIwA$AdvAQ&EAqZ@2YY$1ynD
+      authorizedKeys: 
+        - id_rsa.pub: ssh-rsa SampleBase64RSA123== test@sftp.com
+      encrypted: true
+      uid: 1001
+      gid: 100
+      homeDir: /example/user/subdir
   hostKeys: {}
     #secret: name-of-existing-secret
     #keys:
     #- ssh_host_rsa_key
     #- ssh_host_ed25519_key
-  authorizedKeys: {}
+
 
 debug:
   enabled: false
@@ -67,7 +71,7 @@ vxlanController:
 resources:
   sftp:
     limits:
-      cpu: 100m
+      cpu: 250m
       memory: 128Mi
     requests:
       cpu: 100m

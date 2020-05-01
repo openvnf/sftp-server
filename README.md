@@ -52,14 +52,9 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `service.enabled`                  | If true, expose as Service                 | `true`                                      |
 | `service.type`                     | Type of exposed Service                    | `ClusterIP`                                 |
 | `service.port`                     | Port to expose Service                     | `22`                                        |
-| `sftpConfig.username`              | SFTP username                              | `sftp`                                      |
-| `sftpConfig.password`              | SFTP password for user                     | `""`                                        |
-| `sftpConfig.encrypted`             | If true, password is given as hash         | `false`                                     |
-| `sftpConfig.uid`                   | UID of SFTP user                           | `1000`                                      |
-| `sftpConfig.gid`                   | GID of SFTP user                           | `100`                                       |
+| `sftpConfig.users`                 | SFTP users  (See table below)              | `[]`                                        |
 | `sftpConfig.hostKeys.secret`       | name of secret for SSH host keys           | `""`                                        |
 | `sftpConfig.hostKeys.keys`         | list of items to be used from secret       | `{}`                                        |
-| `sftpConfig.authorizedKeys`        | list of authorized SSH keys                | `{}`                                        |
 | `persistentVolume.enabled`         | If true, use persistent volume             | `true`                                      |
 | `persistentVolume.annotations`     | annotations put on the volume              | `{}`                                        |
 | `persistentVolume.accessModes`     | access modes for volume                    | `[ReadWriteOnce]`                           |
@@ -76,3 +71,17 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `vxlanController.network`          | VXLAN network to attach to                 | `vxeth0`                                    |
 | `vxlanController.ip`               | IP address to assign to vxlan interface    | `{}`                                        |
 | `vxlanController.route`            | additional route to configure              | `{}`                                        |
+
+
+### Users 
+|          Parameter                 |                Description                 |                   Default                   |
+| -----------------------------------| ------------------------------------------ | ------------------------------------------- |
+| `userName`        		         | SFTP Username 	                          | `foo`                                       |
+| `passWord`                		 | SFTP password                              | `bar`                                       |
+| `encrypted`                		 | If true, password is given as hash         | `true`                                      |
+| `authorizedKeys`                 	 | Map of public RSA key files + contents     | `id_rsa.pub: ssh-rsa 123abc`                |
+| `uid`                				 | UID for this user                          | `1001`                                      |
+| `gid`                				 | GID for this user                          | `1001`                                      |
+| `homeDir`                			 | Starting directory of SFTP session *       | `/home/foo/sftp`                            |
+                        
+* A user is able to access all directories in its homedirectory. (/home/userName)
