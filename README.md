@@ -84,4 +84,4 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `gid`                				 | GID for this user                          | `1001`                                      |
 | `homeDir`                			 | Starting directory of SFTP session *       | `/home/foo/sftp`                            |
                         
-* A user is able to access all directories in its homedirectory. (/home/userName)
+-* A user is able to access all directories in its homedirectory. (/home/userName)
