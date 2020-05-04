@@ -52,6 +52,8 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `service.enabled`                  | If true, expose as Service                 | `true`                                      |
 | `service.type`                     | Type of exposed Service                    | `ClusterIP`                                 |
 | `service.port`                     | Port to expose Service                     | `22`                                        |
+| `service.loadBalancer.ip`          | Public IP to for loadbalancer              | `""`                                        |
+| `service.loadBalancer.whitelist`   | IP Whitelist for loadbalancer ingress      | `[]`                                        |
 | `sftpConfig.users`                 | SFTP users  (See table below)              | `[]`                                        |
 | `sftpConfig.hostKeys.secret`       | name of secret for SSH host keys           | `""`                                        |
 | `sftpConfig.hostKeys.keys`         | list of items to be used from secret       | `{}`                                        |
@@ -76,12 +78,12 @@ The following table lists the configurable parameters of the SFTP server chart a
 ### Users 
 |          Parameter                 |                Description                 |                   Default                   |
 | -----------------------------------| ------------------------------------------ | ------------------------------------------- |
-| `userName`        		         | SFTP Username 	                          | `foo`                                       |
-| `passWord`                		 | SFTP password                              | `bar`                                       |
+| `userName`        		         | SFTP Username 	                          | `sftp`                                      |
+| `passWord`                		 | SFTP password                              | `test (encrypted)`                          |
 | `encrypted`                		 | If true, password is given as hash         | `true`                                      |
-| `authorizedKeys`                 	 | Map of public RSA key files + contents     | `id_rsa.pub: ssh-rsa 123abc`                |
-| `uid`                				 | UID for this user                          | `1001`                                      |
-| `gid`                				 | GID for this user                          | `1001`                                      |
-| `homeDir`                			 | Starting directory of SFTP session *       | `/home/foo/sftp`                            |
+| `authorizedKeys`                 	 | Map of public RSA key files + contents     | `""`                                        |
+| `uid`                				 | UID for this user                          | `1000`                                      |
+| `gid`                				 | GID for this user                          | `100`                                       |
+| `homeDir`                			 | Starting directory of SFTP session *       | `/example/user/subdir`                      |
                         
 -* A user is able to access all directories in its homedirectory. (/home/userName)

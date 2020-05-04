@@ -6,7 +6,6 @@
 
 * Added authorized keys to users
 
-
 ### 0.3.0
 
 * Added `NET_ADMIN` capabilities to the sftp-server container.

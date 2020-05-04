@@ -12,6 +12,12 @@ spec:
   type: {{ .Values.service.type }}
   {{- if .Values.service.loadBalancer }}
   loadBalancerIP: {{ .Values.service.loadBalancer.ip }}
+  {{- if .Values.service.loadBalancer.whitelist }}
+  loadBalancerSourceRanges: 
+  {{- range .Values.service.loadBalancer.whitelist }}
+    - {{ . }}
+  {{- end }}
+  {{- end }}
   sessionAffinity: None  
   externalTrafficPolicy: Cluster
   {{- end }}
