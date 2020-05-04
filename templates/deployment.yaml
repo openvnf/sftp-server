@@ -118,7 +118,7 @@ spec:
       {{- if gt (len .authorizedKeys) 0 }}
       - name: volume-authorized-keys-{{ .userName }}
         configMap:
-          name: {{ $fullName }}-authorized-keys{{ .userName }}
+          name: {{ $fullName }}-authorized-keys-{{ .userName }}
       {{- end }}
       {{- end }}
       {{- if .Values.sftpConfig.hostKeys }}
