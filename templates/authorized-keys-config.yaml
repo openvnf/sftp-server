@@ -6,6 +6,9 @@ kind: ConfigMap
 metadata:
   name: {{ $fullName }}-authorized-keys-{{ .userName }}
 data:
-    {{- toYaml .authorizedKeys | nindent 4 }}
+    {{- range $keyName, $rsaKey := .authorizedKeys }}
+      {{ $keyName }}: |
+        {{ $rsaKey }}
+    {{- end }}
 {{- end -}}
 {{- end }}
