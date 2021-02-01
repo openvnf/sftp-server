@@ -3,11 +3,14 @@ sudo: enabled
 services:
   - docker
 
+env:
+  - helmversion=v2.16.1
+
 install:
-  - docker pull lachlanevenson/k8s-helm
+  - docker pull lachlanevenson/k8s-helm:$helmversion
 
 script:
-  - docker run -v `pwd`:/opt/sftp-server --entrypoint "/bin/sh" lachlanevenson/k8s-helm -c  "cd /opt/sftp-server; helm init -c; helm repo add repo $CHART_REPO; helm package -u ."
+  - docker run -v `pwd`:/opt/sftp-server --entrypoint "/bin/sh" lachlanevenson/k8s-helm$helmversion -c  "cd /opt/sftp-server; helm init -c --skip-refresh; helm repo add charts.tplabs.net $CHART_REPO; helm repo rm stable; helm repo add stable https://charts.helm.sh/stable; helm repo update; helm package -u ."
 
 deploy:
   provider: script
@@ -16,4 +19,3 @@ deploy:
   on:
     tags: true
     all_branches: true
-
