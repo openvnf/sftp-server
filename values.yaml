@@ -28,6 +28,13 @@ sftpConfig:
     #- ssh_host_ed25519_key
   authorizedKeys: {}
 
+debug:
+  enabled: false
+  image:
+    repository: quay.io/travelping/nettools
+    tag: v1.10.0
+    pullPolicy: IfNotPresent
+
 persistentVolume:
   enabled: true
   annotations: {}
@@ -58,12 +65,20 @@ vxlanController:
       memory: 64Mi
 
 resources:
-  limits:
-   cpu: 100m
-   memory: 128Mi
-  requests:
-   cpu: 100m
-   memory: 128Mi
+  sftp:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  debug:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
 
 nodeSelector: {}
 

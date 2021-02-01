@@ -43,9 +43,25 @@ spec:
             add: ["NET_ADMIN"]
       {{- end }}
       containers:
+        {{- if .Values.debug.enabled }}
+        - name: debug
+          image: {{ .Values.debug.image.repository }}:{{ .Values.debug.image.tag }}
+          imagePullPolicy: {{ .Values.debug.image.pullPolicy | quote }}
+          resources: {{- toYaml .Values.resources.debug | nindent 12 }}
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          command:
+          - sh
+          - -c
+          - "trap : TERM INT; (while true; do sleep 1000; done) & wait"
+        {{- end }}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
           ports:
             - name: ssh
               containerPort: 22
@@ -77,8 +93,7 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 22
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources.sftp | nindent 12 }}
         {{- if .Values.vxlanController.enabled }}
         - name: vxlan-controller-agent
           image: {{ .Values.vxlanController.image.repository }}:{{ .Values.vxlanController.image.tag }}
