@@ -5,7 +5,7 @@ metadata:
 data:
   users.conf: |
       {{- if eq .Values.sftpConfig.encrypted true }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:e:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:e:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}:{{ .Values.sftpConfig.dir }}
       {{- else }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
+      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}:{{ .Values.sftpConfig.dir }}
       {{- end }}
