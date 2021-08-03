@@ -87,6 +87,10 @@ spec:
               subPath: {{ . }}
             {{- end }}
             {{- end }}
+            {{- if .Values.sftpConfig.customScripts }}
+            - name: custom-scripts
+              mountPath: /etc/sftp.d
+            {{- end }}
           livenessProbe:
             tcpSocket:
               port: 22
@@ -119,6 +123,12 @@ spec:
         secret:
           secretName: {{ .Values.sftpConfig.hostKeys.secret }}
           defaultMode: 384
+      {{- end }}
+      {{- if .Values.sftpConfig.customScripts }}
+      - name: custom-scripts
+        configMap:
+          name: {{ include "sftp-server.fullname" . }}-custom-scripts
+          defaultMode: 0755
       {{- end }}
       {{- if .Values.persistentVolume.enabled }}
       - name: data

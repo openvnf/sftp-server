@@ -1,0 +1,10 @@
+{{- if .Values.sftpConfig.customScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sftp-server.fullname" . }}-custom-scripts
+data:
+  {{- range $k, $v := .Values.sftpConfig.customScripts }}
+  {{ $k }}: {{ $v | toYaml | indent 2 }}
+  {{- end }}
+{{- end }}
