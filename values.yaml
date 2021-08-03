@@ -27,6 +27,7 @@ sftpConfig:
     #- ssh_host_rsa_key
     #- ssh_host_ed25519_key
   authorizedKeys: {}
+  #customScripts: {}
 
 debug:
   enabled: false
