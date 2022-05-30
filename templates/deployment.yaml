@@ -24,6 +24,8 @@ spec:
         {{ .Values.vxlanController.metadataKey }}: "true"
         {{- end }}
       annotations:
+        checksum/config: {{ include (print .Template.BasePath "/sftp-config.yaml") . | sha256sum }}
+        checksum/keys: {{ include (print .Template.BasePath "/authorized-keys-config.yaml") . | sha256sum }}
         {{- if .Values.vxlanController.enabled }}
         {{ .Values.vxlanController.annotationKey }}: | 
           {{ .Values.vxlanController.network }}
