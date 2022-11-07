@@ -28,11 +28,21 @@ sftpConfig:
     #- ssh_host_ed25519_key
   authorizedKeys: {}
 
+initScript:
+  enabled: false
+  env: {}
+  image:
+    repository: quay.io/travelping/nettools
+    tag: v1.11.0
+    pullPolicy: IfNotPresent
+  script: |
+    echo "script configuration is missing"
+
 debug:
   enabled: false
   image:
     repository: quay.io/travelping/nettools
-    tag: v1.10.0
+    tag: v1.11.0
     pullPolicy: IfNotPresent
 
 persistentVolume:
@@ -79,6 +89,13 @@ resources:
     requests:
       cpu: 50m
       memory: 32Mi
+  networkInit:
+    limits:
+      cpu: 500m
+      memory: 192Mi
+    requests:
+      cpu: 500m
+      memory: 192Mi
 
 nodeSelector: {}
 
