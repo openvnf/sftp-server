@@ -25,7 +25,7 @@ spec:
         {{- end }}
       annotations:
         {{- if .Values.vxlanController.enabled }}
-        {{ .Values.vxlanController.annotationKey }}: | 
+        {{ .Values.vxlanController.annotationKey }}: |
           {{ .Values.vxlanController.network }}
             {{ if .Values.vxlanController.ip -}} ip= {{- .Values.vxlanController.ip }} {{- end}}
             {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
@@ -41,6 +41,29 @@ spec:
         securityContext:
           capabilities:
             add: ["NET_ADMIN"]
+      {{- end }}
+      {{- if .Values.initScript.enabled }}
+      - name: init-script
+        image: {{ .Values.initScript.image.repository }}:{{ .Values.initScript.image.tag }}
+        imagePullPolicy: {{ .Values.initScript.image.pullPolicy | quote }}
+        resources:
+          {{- toYaml .Values.resources.initScript | trimSuffix "\n" | nindent 10 }}
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+          {{- if .Values.initScript.additionalSecurityContext }}
+            {{- toYaml .Values.initScript.additionalSecurityContext | trimSuffix "\n" | indent 10 }}
+          {{- end }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "chart.fullname" . }}-init-script-env
+        command:
+        - sh
+        - /opt/initScript/initScript.sh
+        volumeMounts:
+        - name: init-script
+          mountPath: /opt/initScript/
+          readOnly: true
       {{- end }}
       containers:
         {{- if .Values.debug.enabled }}
