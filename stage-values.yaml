@@ -18,7 +18,7 @@ service:
 
 sftpConfig:
   username: j4nhpgyy
-  password: "xHHP3RiAaMq7f&$6"
+  password: <redacted>
   encrypted: false
   uid: "1000"
   gid: "1000"
