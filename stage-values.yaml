@@ -20,8 +20,8 @@ sftpConfig:
   username: j4nhpgyy
   password: "xHHP3RiAaMq7f&$6"
   encrypted: false
-  uid: ""
-  gid: ""
+  uid: "1000"
+  gid: "1000"
   hostKeys:
     {}
     #secret: name-of-existing-secret
