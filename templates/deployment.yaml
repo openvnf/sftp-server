@@ -31,6 +31,8 @@ spec:
             {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
         {{- end }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecret | quote }}
       initContainers:
       {{- if .Values.vxlanController.enabled }}
       - name: vxlan-controller-agent-init
