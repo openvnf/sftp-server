@@ -73,7 +73,7 @@ spec:
               mountPath: /etc/sftp/
             {{- if .Values.persistentVolume.enabled }}
             - name: data
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /
+              mountPath: /home/{{- .Values.sftpConfig.username -}}/{{- .Values.sftpConfig.folder -}}
               {{- if .Values.persistentVolume.subPath }}
               subPath: "{{ .Values.persistentVolume.subPath }}"
               {{- end }}
