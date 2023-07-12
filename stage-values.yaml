@@ -1,0 +1,90 @@
+# Default values for sftp-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: urbit.azurecr.io/sftp
+  tag: bullseye
+  pullPolicy: Always
+  pullSecret: az-urbit-kubernetes-pull-secret
+
+nameOverride: "stage-sftp"
+fullnameOverride: ""
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 22
+
+sftpConfig:
+  username: j4nhpgyy
+  password: "xHHP3RiAaMq7f&$6"
+  encrypted: false
+  uid: ""
+  gid: ""
+  hostKeys:
+    {}
+    #secret: name-of-existing-secret
+    #keys:
+    #- ssh_host_rsa_key
+    #- ssh_host_ed25519_key
+  authorizedKeys: {}
+
+debug:
+  enabled: false
+  # image:
+  #   repository: quay.io/travelping/nettools
+  #   tag: v1.10.0
+  #   pullPolicy: IfNotPresent
+
+persistentVolume:
+  enabled: true
+  localFolder: "upload"
+  annotations: {}
+  accessModes:
+    - ReadWriteMany
+  existingClaim: ""
+  size: 1Gi
+  storageClass: "azurefile"
+  subPath: "ftp-upload"
+
+vxlanController:
+  enabled: false
+  # annotationKey: vxlan.openvnf.org/networks
+  # metadataKey: vxlan.openvnf.org
+  # image:
+  #   repository: openvnf/kube-vxlan-controller-agent
+  #   tag: 2.1.0
+  #   pullPolicy: IfNotPresent
+  # network: "vxeth0"
+  # ip: {}
+  # route: {}
+  # resources:
+  #   limits:
+  #     cpu: 50m
+  #     memory: 64Mi
+  #   requests:
+  #     cpu: 50m
+  #     memory: 64Mi
+
+resources:
+  sftp:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  # debug:
+  #   limits:
+  #     cpu: 100m
+  #     memory: 64Mi
+  #   requests:
+  #     cpu: 50m
+  #     memory: 32Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
