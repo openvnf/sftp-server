@@ -31,6 +31,8 @@ spec:
             {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
         {{- end }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecret | quote }}
       initContainers:
       {{- if .Values.vxlanController.enabled }}
       - name: vxlan-controller-agent-init
@@ -71,7 +73,7 @@ spec:
               mountPath: /etc/sftp/
             {{- if .Values.persistentVolume.enabled }}
             - name: data
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /
+              mountPath: /home/{{- .Values.sftpConfig.username -}}/{{- .Values.persistentVolume.localFolder -}}
               {{- if .Values.persistentVolume.subPath }}
               subPath: "{{ .Values.persistentVolume.subPath }}"
               {{- end }}

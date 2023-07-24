@@ -21,10 +21,10 @@ The chart supports:
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `stage-sftp`:
 
 ```bash
-$ helm install --name my-release repo/sftp-server
+$ helm install --name stage-sftp -f stage-values.yaml . 
 ```
 
 The command deploys an SFTP server exposing the service as `ClusterIP`. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -32,10 +32,10 @@ The command deploys an SFTP server exposing the service as `ClusterIP`. The [con
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `stage-sftp` deployment:
 
 ```bash
-$ helm delete my-release
+$ helm delete stage-sftp 
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
