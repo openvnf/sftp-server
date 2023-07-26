@@ -53,16 +53,17 @@ spec:
         image: {{ .Values.initScript.image.repository }}:{{ .Values.initScript.image.tag }}
         imagePullPolicy: {{ .Values.initScript.image.pullPolicy | quote }}
         resources:
-          {{- toYaml .Values.resources.initScript | trimSuffix "\n" | nindent 10 }}
+{{ toYaml .Values.resources.initScript | indent 10 }}
         securityContext:
           capabilities:
-            add: ["NET_ADMIN"]
-          {{- if .Values.initScript.additionalSecurityContext }}
-            {{- toYaml .Values.initScript.additionalSecurityContext | trimSuffix "\n" | indent 10 }}
-          {{- end }}
+            add:
+            - "NET_ADMIN"
+            {{- if .Values.initScript.additionalSecurityContext }}
+{{ toYaml .Values.initScript.additionalSecurityContext | indent 12 }}
+            {{- end }}
         envFrom:
           - configMapRef:
-              name: {{ template "chart.fullname" . }}-init-script-env
+              name: {{ template "sftp-server.fullname" . }}-init-script-env
         command:
         - sh
         - /opt/initScript/initScript.sh
@@ -153,6 +154,15 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ template "sftp-server.fullname" . }}-data{{- end }}
+      {{- end }}
+      {{- if .Values.initScript.enabled }}
+      - name: init-script
+        configMap:
+          name: {{ template "sftp-server.fullname" . }}-init-script
+          defaultMode: 0544
+          items:
+            - key: initScript.sh
+              path: initScript.sh
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

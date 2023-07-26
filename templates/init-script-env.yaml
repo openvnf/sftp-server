@@ -1,14 +1,14 @@
----
 {{- if .Values.initScript.enabled }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "chart.fullname" . }}-init-script-env
+  name: {{ template "sftp-server.fullname" . }}-init-script-env
   labels:
     {{- include "sftp-server.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
 {{ toYaml .Values.additionalLabels | indent 4 }}
     {{- end }}
 data:
-{{- toYaml .Values.initScript.env | trimSuffix "\n" | nindent 2 }}
+{{ toYaml .Values.initScript.env | indent 2 }}
 {{- end }}
