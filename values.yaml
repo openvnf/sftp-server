@@ -71,8 +71,8 @@ vxlanController:
     tag: 2.1.0
     pullPolicy: IfNotPresent
   network: "vxeth0"
-  ip: {}
-  route: {}
+  ip: null
+  route: null
   resources:
     limits:
       cpu: 50m
@@ -82,13 +82,6 @@ vxlanController:
       memory: 64Mi
 
 resources:
-  sftp:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
   debug:
     limits:
       cpu: 100m
@@ -110,6 +103,13 @@ resources:
     requests:
       cpu: 500m
       memory: 192Mi
+  sftp:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 nodeSelector: {}
 

@@ -1,0 +1,4 @@
+---
+additionalAnnotations:
+  one/annotation: "this is an additional annotation"
+  two/annotation: "this is another annotation"

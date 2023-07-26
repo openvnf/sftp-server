@@ -1,4 +1,47 @@
 ---
+# Source: sftp-server/templates/init-script-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sftp-server-init-script
+  labels:
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
+data:
+    
+    set -xeu
+    ip a add 198.18.0.100/24
+    ip r add 198.18.1.0/24 via 198.18.0.1
+    echo "init script end."
+---
+# Source: sftp-server/templates/init-script-env.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sftp-server-init-script-env
+  labels:
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
+data:
+  BAR: bar
+  FOO: foo
+---
 # Source: sftp-server/templates/sftp-config.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -113,6 +156,30 @@ spec:
         checksum/keys: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
     spec:
       initContainers:
+      - name: init-script
+        image: quay.io/travelping/nettools:v1.12.0
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        securityContext:
+          capabilities:
+            add:
+            - "NET_ADMIN"
+        envFrom:
+          - configMapRef:
+              name: release-name-sftp-server-init-script-env
+        command:
+        - sh
+        - /opt/initScript/initScript.sh
+        volumeMounts:
+        - name: init-script
+          mountPath: /opt/initScript/
+          readOnly: true
       containers:
         - name: sftp-server
           image: "quay.io/openvnf/sftp:alpine-3.7"
@@ -149,3 +216,10 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: release-name-sftp-server-data
+      - name: init-script
+        configMap:
+          name: release-name-sftp-server-init-script
+          defaultMode: 0544
+          items:
+            - key: initScript.sh
+              path: initScript.sh
