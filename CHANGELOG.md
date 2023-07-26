@@ -4,7 +4,10 @@
 
 ### 0.4.0
 * Add initScript container capability
-* Bump nettools container image v1.10.0 -> v1.11.0
+* Bump nettools container image v1.10.0 -> v1.12.0
+* Add additionalAnnotations
+* Add additionalLabels
+* Add imagePullSecrets
 
 ### 0.3.2
 
