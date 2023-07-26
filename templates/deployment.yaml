@@ -164,6 +164,10 @@ spec:
             - key: initScript.sh
               path: initScript.sh
       {{- end }}
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.pullSecrets | indent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
