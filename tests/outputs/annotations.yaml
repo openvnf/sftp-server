@@ -111,6 +111,8 @@ spec:
       annotations:
         checksum/config: 94c419c52579eb78bbb6a52ac8a9abec1d7d8fcb8f86ac6d8e90f98f5500e0d8
         checksum/keys: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        one/annotation: this is an additional annotation
+        two/annotation: this is another annotation
     spec:
       initContainers:
       containers:

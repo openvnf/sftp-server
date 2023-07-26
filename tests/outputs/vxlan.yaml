@@ -108,11 +108,29 @@ spec:
         app.kubernetes.io/version: 0.4.0
         app.kubernetes.io/name: sftp-server
         app.kubernetes.io/instance: release-name
+        vxlan.openvnf.org: "true"
       annotations:
         checksum/config: 94c419c52579eb78bbb6a52ac8a9abec1d7d8fcb8f86ac6d8e90f98f5500e0d8
         checksum/keys: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        vxlan.openvnf.org/networks: |
+          vxeth0
+            ip=198.18.0.100/24
+            route=198.18.1.0/24:198.18.0.1
     spec:
       initContainers:
+      - name: vxlan-controller-agent-init
+        image: openvnf/kube-vxlan-controller-agent:2.1.0
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
       containers:
         - name: sftp-server
           image: "quay.io/openvnf/sftp:alpine-3.7"
@@ -142,6 +160,20 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+        - name: vxlan-controller-agent
+          image: openvnf/kube-vxlan-controller-agent:2.1.0
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
       volumes:
       - name: sftp-config
         configMap:

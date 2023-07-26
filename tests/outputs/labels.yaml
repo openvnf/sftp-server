@@ -14,6 +14,8 @@ metadata:
     app.kubernetes.io/version: 0.4.0
     app.kubernetes.io/name: sftp-server
     app.kubernetes.io/instance: release-name
+    one/label: this is an additional label
+    two/label: this is another label
   name: release-name-sftp-server-users
 data:
   users.conf: |
@@ -34,6 +36,8 @@ metadata:
     app.kubernetes.io/version: 0.4.0
     app.kubernetes.io/name: sftp-server
     app.kubernetes.io/instance: release-name
+    one/label: this is an additional label
+    two/label: this is another label
   name: release-name-sftp-server-data
 spec:
   accessModes:
@@ -58,6 +62,8 @@ metadata:
     app.kubernetes.io/version: 0.4.0
     app.kubernetes.io/name: sftp-server
     app.kubernetes.io/instance: release-name
+    one/label: this is an additional label
+    two/label: this is another label
 spec:
   type: ClusterIP
   ports:
@@ -85,6 +91,8 @@ metadata:
     app.kubernetes.io/version: 0.4.0
     app.kubernetes.io/name: sftp-server
     app.kubernetes.io/instance: release-name
+    one/label: this is an additional label
+    two/label: this is another label
 spec:
   replicas: 1
   selector:
@@ -108,8 +116,10 @@ spec:
         app.kubernetes.io/version: 0.4.0
         app.kubernetes.io/name: sftp-server
         app.kubernetes.io/instance: release-name
+        one/label: this is an additional label
+        two/label: this is another label
       annotations:
-        checksum/config: 94c419c52579eb78bbb6a52ac8a9abec1d7d8fcb8f86ac6d8e90f98f5500e0d8
+        checksum/config: ae89c23fe8c54cd4c553a741381a389d44f53c562de936037cacc7b629efd98c
         checksum/keys: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
     spec:
       initContainers:
