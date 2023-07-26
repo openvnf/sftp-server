@@ -9,6 +9,7 @@ image:
 
 nameOverride: ""
 fullnameOverride: ""
+additionalAnnotations: {}
 additionalLabels: {}
 service:
   enabled: true
