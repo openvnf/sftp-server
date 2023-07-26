@@ -33,6 +33,9 @@ spec:
             {{ if .Values.vxlanController.ip -}} ip= {{- .Values.vxlanController.ip }} {{- end}}
             {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
         {{- end }}
+        {{- if .Values.additionalAnnotations }}
+{{ toYaml .Values.additionalAnnotations | indent 8 }}
+        {{- end }}
     spec:
       initContainers:
       {{- if .Values.vxlanController.enabled }}
