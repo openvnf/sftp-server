@@ -2,6 +2,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  labels:
+    {{- include "sftp-server.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 4 }}
+    {{- end }}
   name: {{ template "sftp-server.fullname" . }}-authorized-keys
 data:
   id_rsa.pub: |

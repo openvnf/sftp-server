@@ -9,7 +9,7 @@ image:
 
 nameOverride: ""
 fullnameOverride: ""
-
+additionalLabels: {}
 service:
   enabled: true
   type: ClusterIP

@@ -5,14 +5,10 @@ kind: ConfigMap
 metadata:
   name: {{ template "chart.fullname" . }}-init-script-env
   labels:
-    {{- if .Values.labels }}
-    {{- toYaml .Values.labels | trimSuffix "\n" | nindent 4 }}
+    {{- include "sftp-server.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 4 }}
     {{- end }}
-    app: {{ template "chart.fullname" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    cennso.net/cnf: smc
 data:
 {{- toYaml .Values.initScript.env | trimSuffix "\n" | nindent 2 }}
 {{- end }}
