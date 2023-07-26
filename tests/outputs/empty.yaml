@@ -3,6 +3,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  labels:
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
   name: release-name-sftp-server-users
 data:
   users.conf: |
@@ -12,6 +23,17 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  labels:
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
   name: release-name-sftp-server-data
 spec:
   accessModes:
@@ -26,10 +48,16 @@ kind: Service
 metadata:
   name: release-name-sftp-server
   labels:
-    app.kubernetes.io/name: sftp-server
-    helm.sh/chart: sftp-server-0.3.2
-    app.kubernetes.io/instance: release-name
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
 spec:
   type: ClusterIP
   ports:
@@ -47,14 +75,22 @@ kind: Deployment
 metadata:
   name: release-name-sftp-server
   labels:
-    app.kubernetes.io/name: sftp-server
-    helm.sh/chart: sftp-server-0.3.2
-    app.kubernetes.io/instance: release-name
+    app: sftp-server
+    run: release-name-sftp-server
+    chart: sftp-server-0.4.0
+    release: release-name
+    heritage: Helm
+    helm.sh/chart: sftp-server-0.4.0
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.4.0
+    app.kubernetes.io/name: sftp-server
+    app.kubernetes.io/instance: release-name
 spec:
   replicas: 1
   selector:
     matchLabels:
+      app: sftp-server
+      release: release-name
       app.kubernetes.io/name: sftp-server
       app.kubernetes.io/instance: release-name
   strategy:
@@ -62,10 +98,18 @@ spec:
   template:
     metadata:
       labels:
+        app: sftp-server
+        run: release-name-sftp-server
+        chart: sftp-server-0.4.0
+        release: release-name
+        heritage: Helm
+        helm.sh/chart: sftp-server-0.4.0
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/version: 0.4.0
         app.kubernetes.io/name: sftp-server
         app.kubernetes.io/instance: release-name
       annotations:
-        checksum/config: c59a65a89dc772d7099b3ba9ce2e7c06f991b0dcaa13288c1c85ed81a9c62ddc
+        checksum/config: 3634359dabd0152e67547791cf4325d0529211891f423afa2c372e57c1924410
         checksum/keys: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
     spec:
       initContainers:
