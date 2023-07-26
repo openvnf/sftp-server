@@ -7,6 +7,10 @@ image:
   tag: alpine-3.7
   pullPolicy: IfNotPresent
 
+pullSecrets: null
+  # - name: sec-1
+  # - name: sec-2
+
 nameOverride: ""
 fullnameOverride: ""
 additionalAnnotations: {}
