@@ -9,4 +9,4 @@ initScript:
     set -xeu
     ip a add 198.18.0.100/24
     ip r add 198.18.1.0/24 via 198.18.0.1
-    echo "init script end."
+    # init script end.

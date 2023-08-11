@@ -16,11 +16,7 @@ metadata:
     app.kubernetes.io/name: sftp-server
     app.kubernetes.io/instance: release-name
 data:
-    
-    set -xeu
-    ip a add 198.18.0.100/24
-    ip r add 198.18.1.0/24 via 198.18.0.1
-    echo "init script end."
+  initScript.sh: "\nset -xeu\nip a add 198.18.0.100/24\nip r add 198.18.1.0/24 via 198.18.0.1\n# init script end."
 ---
 # Source: sftp-server/templates/init-script-env.yaml
 apiVersion: v1

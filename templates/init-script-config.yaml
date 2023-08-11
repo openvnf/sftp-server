@@ -10,5 +10,5 @@ metadata:
 {{ toYaml .Values.additionalLabels | indent 4 }}
     {{- end }}
 data:
-  {{- .Values.initScript.script | trimSuffix "\n" | nindent 4 -}}
+  initScript.sh: {{ .Values.initScript.script | quote}}
 {{- end }}
