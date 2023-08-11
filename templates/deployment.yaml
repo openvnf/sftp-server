@@ -1,34 +1,41 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "sftp-server.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "sftp-server.name" . }}
-    helm.sh/chart: {{ include "sftp-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "sftp-server.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 4 }}
+    {{- end }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "sftp-server.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "sftp-server.selector.labels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "sftp-server.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "sftp-server.labels" . | nindent 8 }}
+        {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 8 }}
+        {{- end }}
         {{- if .Values.vxlanController.enabled }}
         {{ .Values.vxlanController.metadataKey }}: "true"
         {{- end }}
       annotations:
+        checksum/config: {{ include (print .Template.BasePath "/sftp-config.yaml") . | sha256sum }}
+        checksum/keys: {{ include (print .Template.BasePath "/authorized-keys-config.yaml") . | sha256sum }}
         {{- if .Values.vxlanController.enabled }}
-        {{ .Values.vxlanController.annotationKey }}: | 
+        {{ .Values.vxlanController.annotationKey }}: |
           {{ .Values.vxlanController.network }}
             {{ if .Values.vxlanController.ip -}} ip= {{- .Values.vxlanController.ip }} {{- end}}
             {{ if .Values.vxlanController.route -}} route= {{- .Values.vxlanController.route }} {{- end}}
+        {{- end }}
+        {{- if .Values.additionalAnnotations }}
+{{ toYaml .Values.additionalAnnotations | indent 8 }}
         {{- end }}
     spec:
       initContainers:
@@ -41,6 +48,30 @@ spec:
         securityContext:
           capabilities:
             add: ["NET_ADMIN"]
+      {{- end }}
+      {{- if .Values.initScript.enabled }}
+      - name: init-script
+        image: {{ .Values.initScript.image.repository }}:{{ .Values.initScript.image.tag }}
+        imagePullPolicy: {{ .Values.initScript.image.pullPolicy | quote }}
+        resources:
+{{ toYaml .Values.resources.initScript | indent 10 }}
+        securityContext:
+          capabilities:
+            add:
+            - "NET_ADMIN"
+            {{- if .Values.initScript.additionalSecurityContext }}
+{{ toYaml .Values.initScript.additionalSecurityContext | indent 12 }}
+            {{- end }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "sftp-server.fullname" . }}-init-script-env
+        command:
+        - sh
+        - /opt/initScript/initScript.sh
+        volumeMounts:
+        - name: init-script
+          mountPath: /opt/initScript/
+          readOnly: true
       {{- end }}
       containers:
         {{- if .Values.debug.enabled }}
@@ -124,6 +155,19 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ template "sftp-server.fullname" . }}-data{{- end }}
+      {{- end }}
+      {{- if .Values.initScript.enabled }}
+      - name: init-script
+        configMap:
+          name: {{ template "sftp-server.fullname" . }}-init-script
+          defaultMode: 0544
+          items:
+            - key: initScript.sh
+              path: initScript.sh
+      {{- end }}
+      {{- if .Values.pullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.pullSecrets | indent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

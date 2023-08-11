@@ -7,9 +7,14 @@ image:
   tag: alpine-3.7
   pullPolicy: IfNotPresent
 
+pullSecrets: null
+  # - name: sec-1
+  # - name: sec-2
+
 nameOverride: ""
 fullnameOverride: ""
-
+additionalAnnotations: {}
+additionalLabels: {}
 service:
   enabled: true
   type: ClusterIP
@@ -28,11 +33,23 @@ sftpConfig:
     #- ssh_host_ed25519_key
   authorizedKeys: {}
 
+initScript:
+  enabled: false
+  image:
+    repository: quay.io/travelping/nettools
+    tag: v1.12.0
+    pullPolicy: IfNotPresent
+  additionalSecurityContext: {}
+  env: {}
+  script: |
+
+    echo "script configuration is missing"
+
 debug:
   enabled: false
   image:
     repository: quay.io/travelping/nettools
-    tag: v1.10.0
+    tag: v1.12.0
     pullPolicy: IfNotPresent
 
 persistentVolume:
@@ -54,8 +71,8 @@ vxlanController:
     tag: 2.1.0
     pullPolicy: IfNotPresent
   network: "vxeth0"
-  ip: {}
-  route: {}
+  ip: null
+  route: null
   resources:
     limits:
       cpu: 50m
@@ -65,13 +82,6 @@ vxlanController:
       memory: 64Mi
 
 resources:
-  sftp:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
   debug:
     limits:
       cpu: 100m
@@ -79,6 +89,27 @@ resources:
     requests:
       cpu: 50m
       memory: 32Mi
+  initScript:
+    limits:
+      cpu: 50m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  networkInit:
+    limits:
+      cpu: 500m
+      memory: 192Mi
+    requests:
+      cpu: 500m
+      memory: 192Mi
+  sftp:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 nodeSelector: {}
 

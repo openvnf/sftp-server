@@ -1,5 +1,6 @@
 {{- if .Values.persistentVolume.enabled -}}
 {{- if not .Values.persistentVolume.existingClaim -}}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,6 +8,11 @@ metadata:
   annotations:
 {{ toYaml .Values.persistentVolume.annotations | indent 4 }}
   {{- end }}
+  labels:
+    {{- include "sftp-server.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 4 }}
+    {{- end }}
   name: {{ template "sftp-server.fullname" . }}-data
 spec:
   accessModes:
