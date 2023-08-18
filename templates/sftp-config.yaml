@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ template "sftp-server.fullname" . }}-users
 data:
-  users.conf: |
-      {{- if eq .Values.sftpConfig.encrypted true }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:e:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
-      {{- else }}
-      {{ .Values.sftpConfig.username }}:{{ .Values.sftpConfig.password }}:{{ .Values.sftpConfig.uid}}:{{ .Values.sftpConfig.gid }}
-      {{- end }}
+  users.conf: |      
+      {{- range .Values.sftpConfig.users }}
+      {{ .username }}:{{ .password }}{{- if eq $.Values.sftpConfig.encrypted true }}:e{{- end }}:{{ .uid }}:{{ .gid }}
+      {{- end}}
+
+    
