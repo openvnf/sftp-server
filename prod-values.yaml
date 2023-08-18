@@ -8,7 +8,7 @@ image:
   pullPolicy: Always
   pullSecret: az-urbit-kubernetes-pull-secret
 
-nameOverride: "stage-sftp"
+nameOverride: "prod-sftp"
 fullnameOverride: ""
 
 service:
@@ -16,21 +16,15 @@ service:
   type: ClusterIP
   port: 22
 
-sftpConfig:
-  encrypted: false
+sftpConfig:  
+  encrypted: false  
   hostKeys:
     # {}
-    secret: stage-sftp
+    secret: prod-sftp
     keys:
     - ssh_host_rsa_key
     - ssh_host_ed25519_key
-  users:
-  - username: j4nhpgyy
-    password: <redacted>
-    localFolder: upload
-    authorizedKeys: {}
-    uid: 1000
-    gid: 1000
+  users:  
   - username: maersk
     password: <redacted>
     localFolder: postcodes

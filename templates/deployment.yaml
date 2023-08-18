@@ -72,15 +72,11 @@ spec:
             - name: sftp-config
               mountPath: /etc/sftp/
             {{- if .Values.persistentVolume.enabled }}
+              {{- range .Values.sftpConfig.users }}
             - name: data
-              mountPath: /home/{{- .Values.sftpConfig.username -}}/{{- .Values.persistentVolume.localFolder -}}
-              {{- if .Values.persistentVolume.subPath }}
-              subPath: "{{ .Values.persistentVolume.subPath }}"
+              mountPath: /home/{{- .username }}/{{ .localFolder }}
+              subPath: "{{ $.Values.persistentVolume.subPath }}/{{ .username }}"
               {{- end }}
-            {{- end }}
-            {{- if .Values.sftpConfig.authorizedKeys }}
-            - name: authorized-keys
-              mountPath: /home/ {{- .Values.sftpConfig.username -}} /.ssh/keys/
             {{- end }}
             {{- if .Values.sftpConfig.hostKeys }}
             {{- range .Values.sftpConfig.hostKeys.keys }}
@@ -111,11 +107,6 @@ spec:
       - name: sftp-config
         configMap:
           name: {{ include "sftp-server.fullname" . }}-users
-      {{- if .Values.sftpConfig.authorizedKeys }}
-      - name: authorized-keys
-        configMap:
-          name: {{ template "sftp-server.fullname" . }}-authorized-keys
-      {{- end }}
       {{- if .Values.sftpConfig.hostKeys }}
       - name: ssh-host-keys
         secret:

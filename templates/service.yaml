@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: {{ include "sftp-server.fullname" . }}
   labels:
+    app: {{ include "sftp-server.name" . }}
     app.kubernetes.io/name: {{ include "sftp-server.name" . }}
     helm.sh/chart: {{ include "sftp-server.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
