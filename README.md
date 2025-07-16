@@ -55,7 +55,7 @@ The following table lists the configurable parameters of the SFTP server chart a
 | `initScript.additionalSecurityContext` | Additional security context for container  | `{}`                                        |
 | `initScript.env`                       | Environment variables for the script       | `{}`                                        |
 | `initScript.image.repository`          | Docker repo to use                         | `quay.io/travelping/nettools`               |
-| `initScript.image.tag`                 | Docker tag to be used                      | `v1.12.0`                                   |
+| `initScript.image.tag`                 | Docker tag to be used                      | `v1.14.0`                                   |
 | `initScript.image.pullPolicy`          | Image pull policy                          | `IfNotPresent`                              |
 | `initScript.script`                    | The script to run                          | `echo "script configuration is missing"`    |
 | `service.enabled`                      | If true, expose as Service                 | `true`                                      |
