@@ -23,3 +23,7 @@
 ## ignore deployment-unrelated files (600kbyte)
 docs
 examples
+
+.helmignore
+.tool-versions
+.travis.yml

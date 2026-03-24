@@ -1,0 +1,6 @@
+---
+vxlanController:
+  enabled: true
+  network: "vxeth0"
+  ip: 198.18.0.100/24
+  route: 198.18.1.0/24:198.18.0.1

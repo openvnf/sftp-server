@@ -1,17 +1,14 @@
-{{- if .Values.sftpConfig.authorizedKeys }}
+{{- if .Values.initScript.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: {{ template "sftp-server.fullname" . }}-init-script
   labels:
     {{- include "sftp-server.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
 {{ toYaml .Values.additionalLabels | indent 4 }}
     {{- end }}
-  name: {{ template "sftp-server.fullname" . }}-authorized-keys
 data:
-  id_rsa.pub: |
-    {{- range .Values.sftpConfig.authorizedKeys }}
-    {{ . }}
-    {{- end }}
+  initScript.sh: {{ .Values.initScript.script | quote}}
 {{- end }}
