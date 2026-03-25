@@ -119,11 +119,19 @@ spec:
             {{- end }}
             {{- end }}
           livenessProbe:
+            {{- if .Values.livenessProbe }}
+            {{ toYaml .Values.livenessProbe | nindent 12 }}
+            {{- else }}
             tcpSocket:
               port: 22
+            {{- end }}
           readinessProbe:
+            {{- if .Values.readinessProbe }}
+            {{ toYaml .Values.readinessProbe | nindent 12 }}
+            {{- else }}
             tcpSocket:
               port: 22
+            {{- end }}
           resources: {{- toYaml .Values.resources.sftp | nindent 12 }}
         {{- if .Values.vxlanController.enabled }}
         - name: vxlan-controller-agent
